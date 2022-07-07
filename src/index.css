@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.home-container{
+  background-repeat: no-repeat;
+  max-height:100%;
+  max-width:100%;
+  display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
