@@ -3,11 +3,14 @@ import React, { Component } from 'react';
 import Home from './Home';
 import Login from './Login';
 import Registration from './Registration';
+import UserProfile from './Components/UserProfile/UserProfile';
+import AdminProfile from './Components/AdminProfile/AdminProfile';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 
-class App extends Component {
-  render() {
+function App()  {
+  sessionStorage.clear();
+
   return ( 
 <Router>
            <div className="App">
@@ -36,10 +39,11 @@ class App extends Component {
     <Route exact path="/" element={<Home/>}></Route>
     <Route exact path='/login' element={<Login/>}></Route>
     <Route exact path='/registration'  element={<Registration/>}></Route>
+    {/* <Route exact path='/userdashboard'   element={<UserProfile/>}></Route> */}
+    {/* <Route exact path='/admindashboard'  element={<AdminProfile/>}></Route> */}
   </Routes>
   </Router>
   );  
-  }
 };
 
 export default App; 

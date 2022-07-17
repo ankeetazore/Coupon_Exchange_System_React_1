@@ -22,3 +22,7 @@ code {
     width: 100%;
     text-align: center;
 }
+
+thead[data-test=table-foot] {
+  display: none;
+}

@@ -2,50 +2,83 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
 import styled from "styled-components";
-import {BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import UserProfile from './Components/UserPages/UserProfile';
-import AdminProfile from './Components/AdminPages/AdminProfile';
-//import {mobile} from "../responsive";
+import swal from "sweetalert2"; 
 
 let LoggedInUserDetails = {};
 
 class Login extends Component{
-    submitHandler(event) {
-        event.preventDefault();
-        const data={
-            username : document.getElementById('EmailId').value,
-            password : document.getElementById('Password').value
-                   };
-
-        const apiurl="https://localhost:44346/api/Login?username=" + document.getElementById('EmailId').value + "&password=" + document.getElementById('Password').value;
-        axios.post(apiurl).then((response)=>{
-            if (response.status === 200){            
-                console.log(response.data);
-                if(response.data === "Success"){
-                  const apiurl="https://localhost:44346/api/UserRegistration/" + document.getElementById('EmailId').value;
-                  axios.get(apiurl).then((response)=>{
-                 if (response.status === 200){            
-                console.log(response.data);
-                LoggedInUserDetails=response.data;
-                if(LoggedInUserDetails.userRole === "Admin"){
-                  window.location.reload();
-                }else{
-
-                }
-
+  validateCredentials (event){
+    event.preventDefault();
+    let username = document.getElementById('EmailId').value;
+    let password = document.getElementById('Password').value;
+    if(username.length === 0)
+    alert("Enter Email");
+    else if(password.length === 0)
+    alert("Enter Password");
+    else
+    {
+      const apiurl="https://localhost:44346/api/Login?username=" + username+ "&password=" + password;
+      axios.post(apiurl).then((response)=>{
+          if (response.status === 200 && response.data === "Success")
+          {            
+                const apiurl="https://localhost:44346/api/UserRegistration/" + username;
+                axios.get(apiurl).then((response)=>{
+               if (response.status === 200)
+               {            
+              console.log(response.data);
+              LoggedInUserDetails=response.data;
+              sessionStorage.setItem("LoggedInUserDetails",JSON.stringify(response.data));
+              if(LoggedInUserDetails.userRole === "Admin"){
+               swal.fire({
+                  title: "Login Successfull",
+                  text: "Redirecting to Admin Dashboard",
+                  icon: "success",
+                  confirmButtonText: "OK",
+                }).then(function () {
+                    //redirect to admin dashboard
+                    window.location.href = "/";
+                  });
+                
               }
-          else
-            alert('Invalid User'); 
-              })
-                }
+              else{
+                swal.fire({
+                  title: "Login Successfull",
+                  text: "Redirecting to User Dashboard",
+                  icon: "success",
+                  confirmButtonText: "OK",
+                }).then(function () {
+                    //redirect to user dashboard
+                    window.location.href = "/";
+                  });
+                 
               }
-else
-  alert('Invalid User'); 
-        })
+            }
+        else{
+          swal.fire({
+            title: "Invalid Email or Password",
+            text: "Try Again",
+            icon: "warning",
+            confirmButtonText: "OK",
+          }).then(function () {
+            });
+        }
+            })
+            }
+else{
+  swal.fire({
+    title: "Invalid Email or Password",
+    text: "Try Again",
+    icon: "warning",
+    confirmButtonText: "OK",
+  }).then(function () {
+    });
+}
+      })
     }
-    
-    render() {
-const Container = styled.div`
+    }
+
+render(){
+  const Container = styled.div`
   width: 100vw;
   height: 100vh;
   background-image: linear-gradient(to right, #b24592, #f15f79);
@@ -61,7 +94,7 @@ const Wrapper = styled.div`
   background-color: white;
   text-align: center;
 `;
-//${mobile({ width: "75%" })}
+
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 300;
@@ -100,19 +133,19 @@ const Link = styled.a`
   cursor: pointer;
 `;
 
-        return (
-<Container>
-      <Wrapper>
-        <Title>SIGN IN</Title>
-        <Form>
-          <Input type="text" placeholder="Enter Email" id='EmailId'/>
-          <Input type="password" placeholder="Enter Password" id='Password'/>
-          <Div><Button onClick={this.submitHandler}>LOGIN</Button></Div>
-          <Link>Forgot your password?</Link>
-        </Form>
-      </Wrapper>
-    </Container>);
-
+  return (
+    <Container>
+          <Wrapper>
+            <Title>SIGN IN</Title>
+            <Form>
+              <Input type="text" placeholder="Enter Email" id='EmailId' />
+              <Input type="password" placeholder="Enter Password" id='Password' />
+              <Div><Button onClick={this.validateCredentials}>LOGIN</Button></Div>
+              <Link>Forgot your password?</Link>
+            </Form>
+          </Wrapper>
+        </Container>
+        );
 }
 }
 

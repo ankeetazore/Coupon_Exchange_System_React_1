@@ -5,8 +5,8 @@ import homeImage from "./assets/home_page.jpg";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Home() {
+  sessionStorage.clear();
   return (
-      
     <div className="parent">
       <div className="home-container" style={{backgroundImage: `url(${homeImage})`}}>
         <div className="font-bold mt-5 p-2" style={{fontSize:'xx-large'}}>Welcome To Coupon Exchange System</div>

@@ -1,39 +1,67 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import swal from "sweetalert2"; 
 import './App.css';
 import styled from "styled-components";
 //import {mobile} from "../responsive";
 
 class Registration extends Component{
-    constructor(props) {
-        super(props);
-        this.onRegisterUser = this.onRegisterUser.bind(this);
-      }
-
-    onRegisterUser(){
+       onRegisterUser(event){
+        event.preventDefault();
         let MobileNo = 0;
         if(document.getElementById('MobileNumber') != null || document.getElementById('MobileNumber') != undefined)
             MobileNo = document.getElementById('MobileNumber').value;
             
         let user={
+            UserId:0,
             Name:document.getElementById('Name').value,
             EmailId:document.getElementById('EmailId').value,
             MobileNumber:MobileNo,
             Password:document.getElementById('Password').value,
-            UserRole:"User"
+            UserRole:"User",
+            CouponExchangeCount:0,
+            couponUploadCount:0
             };
             fetch('https://localhost:44346/api/UserRegistration',{
                 method: 'POST',
                 headers:{'Content-type':'application/json'},
                   body: JSON.stringify(user)
-              }).then(r=>r.json()).then(res=>{
-                if(res){
-                  console.log(res);
+              }).then(r=>r.json())
+              .then((data) => {
+                console.log(data);
+                if(data.userId !== 0){
+                   sessionStorage.setItem("LoggedInUserDetails",JSON.stringify(data));
+                  swal.fire({
+                    title: "Registration Successfull",
+                    text: "Redirecting to User Dashboard",
+                icon: "success",
+                confirmButtonText: "OK",
+              }).then(function () {
+                  //redirect to user dashboard
+                  window.location.href = "/";
+                });
                 }
-              }
-              )}
+                else{
+                  swal.fire({
+                    title: data,
+                    text: "Try Again",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                  })
+                }
+              })
+              .catch((error) => {
+                swal.fire({
+                  title: "Error Occured",
+                  text: "Try Again",
+                  icon: "error",
+                  confirmButtonText: "OK",
+                })
+              });
+            }
     
     render() {
+      sessionStorage.clear();
+      
         const Container = styled.div`
         width: 100vw;
         height: 100vh;

@@ -2,12 +2,39 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import UserProfile from './Components/UserProfile/UserProfile';
+import AdminProfile from './Components/AdminProfile/AdminProfile';
 import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.min.css';   
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+function RenderElement(){
+  let LoggedInUserDetails = null;
+  if(sessionStorage.getItem("LoggedInUserDetails") !== null && sessionStorage.getItem("LoggedInUserDetails") !== undefined){
+    LoggedInUserDetails =  JSON.parse(sessionStorage.getItem("LoggedInUserDetails"));
+  }
+ 
+  if(LoggedInUserDetails !== null && LoggedInUserDetails.userRole === "Admin"){
+    return(
+      <AdminProfile/>
+    );
+  }
+  else if(LoggedInUserDetails !== null && LoggedInUserDetails.userRole === "User"){
+    return(
+      <UserProfile/>
+    );
+  }
+  else{
+    return(
+      <App/>
+    );
+  }
+}
+
 root.render(
   <React.StrictMode>
-    <App />
+<RenderElement/>
   </React.StrictMode>
 );
 
