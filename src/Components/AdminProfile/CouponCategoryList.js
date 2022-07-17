@@ -9,7 +9,6 @@ import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
 import $ from 'jquery'; 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { MDBDataTable } from "mdbreact";
 
 let LoggedInUserDetails = null;
 
@@ -23,44 +22,42 @@ constructor(props){
     window.location.href = "/";
     window.location.reload();
     }
-    
 }
 
 render() {
-    const category_table = {
-        columns: [
-          {
-            label: "Sr No.",
-            field: "col_1",
-            sort: "asc",
-            width: 100,
-          },
-          {
-            label: "Category Image",
-            field: "col_2",
-            sort: "asc",
-            width: 200,
-          },
-          {
-            label: "Category Name",
-            field: "col_3",
-            sort: "asc",
-            width: 200,
-          },
-          {
-            label: "Action",
-            field: "col_4",
-            sort: "asc",
-            width: 100,
-          },
-        ],
-        rows:JSON.parse(sessionStorage.getItem("CouponCategoryList"))
-      };
-
+   
+const category_list = JSON.parse(sessionStorage.getItem("CouponCategoryList"));
       return (
-            <div className="row p-5">
-            <MDBDataTable striped bordered small data={category_table} id="CouponCategoryListTable" />
-            </div>
+<>
+<div className="row p-4" style={{height:"75vh",overflowY:"scroll"}}>
+            <table class="table">
+              <thead>
+                <th>Sr No.</th>
+                <th>Category Image</th>
+                <th>Category Name</th>
+                <th>Action</th>
+              </thead>
+              <tbody>
+           {
+               category_list.map((value)=>
+                    <tr>
+                      <td style={{height:"15px"}}>{value.couponCategoryId}</td>
+                      <td style={{height:"15px"}}>{value.categoryImagePath}</td>
+                      <td style={{height:"15px"}}>{value.categoryName}</td>
+                      <td className="p-0" style={{height:"15px"}}>
+                      <div>
+                      <button className="btn btn-secondary waves-effect waves-light">Edit</button>
+                      <button className="btn btn-danger waves-effect waves-light m-2">Delete</button>
+                                        </div>
+                        </td>
+                    </tr>
+                  
+               )
+           }
+           </tbody>
+           </table>
+                   </div>
+        </>
 );
 
 }

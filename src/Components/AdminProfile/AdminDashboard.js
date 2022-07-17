@@ -94,45 +94,30 @@ constructor(props){
         this.handleSubmit(value);
     }
 
-    // deleteCouponCategory = (postId) => {
-    //     // fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`, {
-    //     //   method: "DELETE",
-    //     // })
-    //     //   .then((res) => res.json())
-    //     //   .then((res) => {
-    //     //     var postIndex = posts.findIndex(function (o) {
-    //     //       return o.id === postId;
-    //     //     });
-    //     //     if (postIndex !== -1) {
-    //     //       setPosts(posts.filter((item) => item.id != postId));
-    //     //     }
-    //     //   });
-    //     alert(postId);
-    //   };
+    deleteCouponCategory = (postId) => {
+        // fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`, {
+        //   method: "DELETE",
+        // })
+        //   .then((res) => res.json())
+        //   .then((res) => {
+        //     var postIndex = posts.findIndex(function (o) {
+        //       return o.id === postId;
+        //     });
+        //     if (postIndex !== -1) {
+        //       setPosts(posts.filter((item) => item.id != postId));
+        //     }
+        //   });
+        alert(postId);
+      };
 
 render() {
-    const datatable_rows = [];
     axios.get('https://localhost:44346/api/CouponCategory').then(res => 
      {
-       res.data.map((x) => {
-        let i = 1;
-        let obj = {
-            "col_1": i++, 
-            "col_2": x.categoryImagePath,
-            "col_3":x.categoryName, 
-            "col_4": `<div>
-                <div onClick={() => this.deleteCouponCategory(x.couponCategoryId)}>
-                  Delete
-                </div>
-              </div>`
-        }; 
-        datatable_rows.push(obj);
-    })
-    sessionStorage.setItem("CouponCategoryList",JSON.stringify(datatable_rows));
+    sessionStorage.setItem("CouponCategoryList",JSON.stringify(res.data));
      }); 
 
       return (
-  <div className="row p-5" style={{textAlign: "left"}}>
+  <div className="row p-4" style={{textAlign: "left"}}>
   <div className="col-3">
   <div className="card border-0 bg-light">
   <img className="card-img-top img-fluid profile-img" id='UserProfileImage' src={DefaultProfilePath} alt="Card image cap" style={{height: "130px",width:"150px"}}/> 
@@ -156,15 +141,15 @@ render() {
 
 <div className="col-9">
                                 <div className="card border-0 bg-light">
-                                    <div className="card-body">
-                                        <div className='align-right'>
+                                    <div className="card-body pt-0">
+                                        <div style={{display:"flex",justifyContent:"flex-end"}}>
                                         <Link to='/addcouponcategory'>
                                     <a className="btn btn-primary waves-effect waves-light m-2">Add New Coupon Category
                         </a>
                                       </Link> 
                                       
                                     <Link to='/addcoupon'>
-                                    <a className="btn btn-primary waves-effect waves-light ">Add New Coupon
+                                    <a className="btn btn-primary waves-effect waves-light m-2">Add New Coupon
                         </a>
                                       </Link>    
                                         </div>
@@ -172,24 +157,7 @@ render() {
                                         {<CouponCategoryList/>}
                                     </div>
                                 </div>
-                            {/* </div>
-
-                            <div className="col-3">
-                                <div className="card border-0 bg-light">
-                                <div className="card-body" style={{display:"flex"}}>
-                                    <Link to='/addcouponcategory'>
-                                    <a className="btn btn-primary waves-effect waves-light m-2">Add New Coupon Category
-                        </a>
-                                      </Link> 
-                                      <br></br>
-                                    <Link to='/addcoupon'>
-                                    <a className="btn btn-primary waves-effect waves-light mt-2">Add New Coupon
-                        </a>
-                                      </Link>    
-
-                                        
-                                    </div>
-                                </div> */}
+                            
                             </div>
   </div>
   );
