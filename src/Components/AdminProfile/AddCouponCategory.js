@@ -1,69 +1,76 @@
 import React,{Component} from "react";
 import styled from "styled-components";
 import swal from "sweetalert2"; 
+import axios from 'axios';
 
+function addCouponCategory (event) {
+  event.preventDefault();
+  let categoryName = document.getElementById('CategoryName').value;
+  if(categoryName.length === 0)
+  alert("Enter Category Name");
 
-class AddCouponCategory extends Component{
-  addCouponCategory(event){
-    event.preventDefault();
-    let categoryName = document.getElementById('CategoryName').value;
-    if(categoryName.length === 0)
-    alert("Enter Category Name");
+  let UserData = null;
+      if(sessionStorage.getItem("LoggedInUserDetails") !== null && sessionStorage.getItem("LoggedInUserDetails") !== undefined){
+        UserData =  JSON.parse(sessionStorage.getItem("LoggedInUserDetails"));
+      }
 
-    let UserData = null;
-        if(sessionStorage.getItem("LoggedInUserDetails") !== null && sessionStorage.getItem("LoggedInUserDetails") !== undefined){
-          UserData =  JSON.parse(sessionStorage.getItem("LoggedInUserDetails"));
-        }
-
-    let couponCategory={
-      CouponCategoryId:0,
-      CategoryName:categoryName,
-      CategoryImagePath:"",
-      UserId: (UserData != null)? UserData.userId : 0
-        };
-        fetch('https://localhost:44346/api/CouponCategory',{
-            method: 'POST',
-            headers:{'Content-type':'application/json'},
-              body: JSON.stringify(couponCategory)
-          }).then(r=>r.json())
-          .then((data) => {
-            console.log(data);
-            if(data.couponCategoryId !== 0){
-              swal.fire({
-                title: "Coupon Category Added Successfully",
-            icon: "success",
-            confirmButtonText: "OK",
-          }).then(function () {
-              //redirect to dashboard
-              window.location.href = "/";
-            });
-            }
-            else{
-              swal.fire({
-                title: data,
-                text: "Try Again",
-                icon: "error",
-                confirmButtonText: "OK",
-              })
-            }
-          })
-          .catch((error) => {
+  let couponCategory={
+    CouponCategoryId:0,
+    CategoryName:categoryName,
+    CategoryImagePath:"",
+    UserId: (UserData != null)? UserData.userId : 0
+      };
+      fetch('https://localhost:44346/api/CouponCategory',{
+          method: 'POST',
+          headers:{'Content-type':'application/json'},
+            body: JSON.stringify(couponCategory)
+        }).then(r=>r.json())
+        .then((data) => {
+          if(data.couponCategoryId !== 0){
+            axios.get('https://localhost:44346/api/CouponCategory').then(res => 
+   {
+  sessionStorage.setItem("CouponCategoryList",JSON.stringify(res.data));
+   }); 
             swal.fire({
-              title: "Error Occured",
+              title: "Coupon Category Added Successfully",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(function () {
+            //redirect to dashboard
+            window.location.href = "/";
+          });
+          }
+          else{
+            swal.fire({
+              title: data,
               text: "Try Again",
               icon: "error",
               confirmButtonText: "OK",
             })
-          });
-        }
+          }
+        })
+        .catch((error) => {
+          swal.fire({
+            title: "Error Occured",
+            text: "Try Again",
+            icon: "error",
+            confirmButtonText: "OK",
+          })
+        });
+      }
 
-        cancelAddCouponCategory(event){
-          event.preventDefault();                  
-                    //redirect to dashboard
-                    window.location.href = "/";
-              }
+      function cancelAddCouponCategory(event){
+        event.preventDefault();                  
+                  //redirect to dashboard
+                  window.location.href = "/";
+            }
 
-    render(){
+function AddCouponCategory({value}) {
+  console.log(value);
+      //const category_data = this.props.data;
+      //if(category_data != undefined)
+      //alert(category_data);
+
         const Container = styled.div`
         width: 100vw;
         height: 100vh;
@@ -119,14 +126,13 @@ class AddCouponCategory extends Component{
                 {/* image */}
                 <br></br>
                 <Div>
-                <Button onClick={this.addCouponCategory}>Add</Button>
-                <Button onClick={this.cancelAddCouponCategory}>Cancel</Button>
+                <Button onClick={addCouponCategory}>Add</Button>
+                <Button onClick={cancelAddCouponCategory}>Cancel</Button>
                 </Div>
               </Form>
             </Wrapper>
           </Container>
         );
-    }
 }
 
 export default AddCouponCategory;

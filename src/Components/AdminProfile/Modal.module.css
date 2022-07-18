@@ -1,0 +1,109 @@
+.darkBG {
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+  
+  .modal {
+    width: 500px;
+    height: 250px;
+    background: white;
+    color: white;
+    z-index: 10;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+  }
+  
+  .modalHeader {
+    height: 50px;
+    background: white;
+    overflow: hidden;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 10px;
+  }
+  
+  .heading {
+    margin: 0;
+    padding: 10px;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+  }
+  
+  .modalContent {
+    padding: 10px;
+    font-size: 14px;
+    color: #2c3e50;
+    text-align: center;
+  }
+  
+  .modalActions {
+    bottom: 2px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+  .actionsContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .addBtn {
+    margin-top: 10px;
+    cursor: pointer;
+    width: 20%;
+        border: none;
+        padding: 10px 10px;
+        color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    border-radius: 8px;
+    margin: 5px;
+  }
+  
+    .cancelBtn {
+    margin-top: 10px;
+    cursor: pointer;
+    width: 20%;
+    border: none;
+    padding: 10px 10px;
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    border-radius: 8px;
+    margin: 5px;
+  }
+  
+  .modalForm{
+    display: grid;
+        flex-wrap: wrap;
+  }
+
+  .modalFormInput{
+    flex: 1;
+    min-width: 40%;
+    margin: 15px 10px 0px 0px;
+    padding: 10px;
+    border-style: solid;
+  }
+

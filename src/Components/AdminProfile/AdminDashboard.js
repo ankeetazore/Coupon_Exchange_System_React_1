@@ -5,7 +5,7 @@ import DefaultProfilePath from './admin-assets/profile-image.png';
 import swal from "sweetalert2"; 
 import CouponCategoryList from './CouponCategoryList';
 import axios from 'axios';
-
+import Modal from "./Modal";
 
 let LoggedInUserDetails = null;
 class AdminDashboard extends Component{
@@ -23,8 +23,17 @@ constructor(props){
         userdata : LoggedInUserDetails,
         name : LoggedInUserDetails.name,
         mobilenumber : LoggedInUserDetails.mobileNumber,
-        isDisabled : true
+        isDisabled : true,
+        isOpen:false
     }
+    axios.get('https://localhost:44346/api/CouponCategory').then(res => 
+     {
+    sessionStorage.setItem("CouponCategoryList",JSON.stringify(res.data));
+     }); 
+}
+
+setIsOpen = (e) => {
+  this.setState({isOpen: !this.state.isOpen});
 }
 
       EditProfile = (e) => {
@@ -94,27 +103,8 @@ constructor(props){
         this.handleSubmit(value);
     }
 
-    deleteCouponCategory = (postId) => {
-        // fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`, {
-        //   method: "DELETE",
-        // })
-        //   .then((res) => res.json())
-        //   .then((res) => {
-        //     var postIndex = posts.findIndex(function (o) {
-        //       return o.id === postId;
-        //     });
-        //     if (postIndex !== -1) {
-        //       setPosts(posts.filter((item) => item.id != postId));
-        //     }
-        //   });
-        alert(postId);
-      };
-
 render() {
-    axios.get('https://localhost:44346/api/CouponCategory').then(res => 
-     {
-    sessionStorage.setItem("CouponCategoryList",JSON.stringify(res.data));
-     }); 
+    
 
       return (
   <div className="row p-4" style={{textAlign: "left"}}>
@@ -143,18 +133,19 @@ render() {
                                 <div className="card border-0 bg-light">
                                     <div className="card-body pt-0">
                                         <div style={{display:"flex",justifyContent:"flex-end"}}>
-                                        <Link to='/addcouponcategory'>
-                                    <a className="btn btn-primary waves-effect waves-light m-2">Add New Coupon Category
+                                        {/* <Link to='/addcouponcategory'> */}
+                                    <a className="btn btn-primary waves-effect waves-light m-2"  onClick={this.setIsOpen}>Add New Coupon Category
                         </a>
-                                      </Link> 
-                                      
-                                    <Link to='/addcoupon'>
+                                      {/* </Link>  */}
+                                      {this.state.isOpen && <Modal setIsOpen={this.setIsOpen} id={0} />}
+
+                                    <Link to='/addcoupon'> 
                                     <a className="btn btn-primary waves-effect waves-light m-2">Add New Coupon
                         </a>
-                                      </Link>    
+                                      </Link>                                         
                                         </div>
                                     
-                                        {<CouponCategoryList/>}
+                                        {<CouponCategoryList/> }
                                     </div>
                                 </div>
                             

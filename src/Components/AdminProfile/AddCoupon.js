@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import styled from "styled-components";
 import swal from "sweetalert2"; 
-
+import Select from "react-dropdown-select";
 
 class AddCoupon extends Component{
   addCoupon(event){
@@ -33,7 +33,7 @@ class AddCoupon extends Component{
       CouponCategoryId:couponCategoryId,
       UserId: (UserData != null)? UserData.userId : 0
         };
-        fetch('https://localhost:44346/api/Coupon',{
+        fetch('https://localhost:44346/api/Coupon/UploadCoupon',{
             method: 'POST',
             headers:{'Content-type':'application/json'},
               body: JSON.stringify(coupon)
@@ -76,6 +76,16 @@ class AddCoupon extends Component{
               }
 
     render(){
+      const category_list = JSON.parse(sessionStorage.getItem("CouponCategoryList"));
+      const category_obj = [];
+        category_list.map((x) => {
+          const obj = {
+            "id": x.couponCategoryId,
+            "value": x.categoryName
+          }
+          category_obj.push(obj);
+        })
+      
         const Container = styled.div`
         width: 100vw;
         height: 100vh;
@@ -86,7 +96,7 @@ class AddCoupon extends Component{
       `;
       
       const Wrapper = styled.div`
-        width: 30%;
+        width: 40%;
         padding: 20px;
         background-color: white;
       `;
@@ -94,6 +104,7 @@ class AddCoupon extends Component{
       const Title = styled.h1`
         font-size: 24px;
         font-weight: 300;
+        text-align: center;
       `;
       
       const Form = styled.form`
@@ -103,8 +114,12 @@ class AddCoupon extends Component{
       
       const Input = styled.input`
         flex: 1;
-        min-width: 40%;
+        width: 100%;
         margin: 15px 10px 0px 0px;
+        padding: 10px;
+      `;
+
+      const Label = styled.label`
         padding: 10px;
       `;
 
@@ -121,19 +136,51 @@ class AddCoupon extends Component{
       const Div = styled.div`
         text-align: center;
     `;
+
+    const Table = styled.table`
+    `;
    
         return(
             <Container>
             <Wrapper>
               <Title>Add Coupon</Title>
               <Form>
-                <Input type="text" placeholder="Enter Expiry Date*" id='ExpiryDate'/>                
-                <Input type="text" placeholder="Enter Min Spend" id='MinSpend'/>
-                <Input type="text" placeholder="Enter Max Off" id='MaxOff'/>
-                <Input type="text" placeholder="Enter Brand Name" id='BrandName'/>
-                <Input type="text" placeholder="Enter Coupon Code*" id='CouponCode'/>
-                <Input type="text" placeholder="Enter Product List" id='ProductList'/>
-                <Input type="text" placeholder="Enter Coupon Category Id*" id='CouponCategoryId'/>
+                <Table>
+                  <tbody>
+                  <tr>
+                    <td><Label>Enter Expiry Date<span style={{color:"red"}}>*</span></Label></td>
+                    <td><Input type="text" id='ExpiryDate'/></td>
+                  </tr>
+                  <tr>
+                  <td><Label>Enter Min Spend</Label></td>
+                    <td><Input type="text" id='MinSpend'/></td>
+                  </tr>
+                  <tr>
+                  <td><Label>Enter Max Off</Label></td>
+                    <td><Input type="text" id='MaxOff'/></td>
+                  </tr>
+                  <tr>
+                  <td><Label>Enter Company Name<span style={{color:"red"}}>*</span></Label></td>
+                    <td><Input type="text" id='BrandName'/></td>
+                  </tr>
+                  <tr>
+                  <td><Label>Enter Coupon Code<span style={{color:"red"}}>*</span></Label></td>
+                    <td><Input type="text" id='CouponCode'/></td>
+                  </tr>
+                  <tr>
+                  <td><Label>Enter Product List</Label></td>
+                    <td><Input type="text" id='ProductList'/></td>
+                  </tr>
+                  <tr>
+                  <td><Label>Enter Coupon Category Id<span style={{color:"red"}}>*</span></Label></td>
+                    <td>
+                      <Input type="text" id='CouponCategoryId'/>
+                      {/* <select options={category_obj} onChange={(values) => this.setValues(values)} />  */}
+                      </td>
+                  </tr>
+                    </tbody>
+                </Table>
+
                 <br></br>
                 <Div>
                 <Button onClick={this.addCoupon}>Add</Button>
