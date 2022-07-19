@@ -3,6 +3,7 @@ import { RiCloseLine } from "react-icons/ri";
 import swal from "sweetalert2";
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
+import {API_URL} from "./Const/Const";
 
 const Modal = ({ setIsOpen, id }) => {
 
@@ -25,13 +26,13 @@ const Modal = ({ setIsOpen, id }) => {
           CategoryImagePath:"",
           UserId: (UserData != null)? UserData.userId : 0
             };
-            fetch('https://localhost:44346/api/CouponCategory',{
+            fetch(API_URL + 'CouponCategory',{
                 method: 'POST',
                 headers:{'Content-type':'application/json'},
                   body: JSON.stringify(couponCategory)
               }).then(r=>r.json())
               .then((data) => {
-                  axios.get('https://localhost:44346/api/CouponCategory').then(res =>
+                  axios.get(API_URL+ 'CouponCategory').then(res =>
          {
         sessionStorage.setItem("CouponCategoryList",JSON.stringify(res.data));
          });
@@ -53,6 +54,7 @@ const Modal = ({ setIsOpen, id }) => {
                       setIsOpen(false);
                     });
                 }
+                window.location.href = "/";
               })
               .catch((error) => {
                 swal.fire({

@@ -2,20 +2,45 @@ import React,{Component} from "react";
 import styled from "styled-components";
 import swal from "sweetalert2"; 
 import Select from "react-dropdown-select";
+import {API_URL} from "./Const/Const";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class AddCoupon extends Component{
+  constructor(props) {
+    super(props);
+    this.state = {  
+      expiryDate: new Date()  
+    };  
+    this.handleChange = this.handleChange.bind(this);  
+  }
+
+  handleChange(date) {  
+    this.setState({  
+      expiryDate: date  
+    })  
+  }  
+
   addCoupon(event){
     event.preventDefault();
     let expiryDate = document.getElementById('ExpiryDate').value;
     let couponCode = document.getElementById('CouponCode').value;
-    let couponCategoryId = document.getElementById('CouponCategoryId').value;
+    let couponCategoryId = parseInt(document.getElementById('CouponCategoryId').value);
 
-    if(expiryDate.length === 0)
-    alert("Enter Expiry Date");
-    if(couponCode.length === 0)
-    alert("Enter Coupon Code");
-    if(couponCategoryId.length === 0)
-    alert("Enter Coupon Category Id");
+    if(expiryDate.length === 0){
+      alert("Enter Expiry Date");
+      return false;
+    }
+    
+    if(couponCode.length === 0){
+      alert("Enter Coupon Code");
+      return false;
+    }
+   
+    if(couponCategoryId === 0 || couponCategoryId === undefined){
+      alert("Select Coupon Category Id");
+      return false;
+    }
 
     let UserData = null;
         if(sessionStorage.getItem("LoggedInUserDetails") !== null && sessionStorage.getItem("LoggedInUserDetails") !== undefined){
@@ -25,22 +50,22 @@ class AddCoupon extends Component{
     let coupon={
       CouponId:0,
       ExpiryDate:expiryDate,
-      MinSpend:document.getElementById('MinSpend').value,
-      MaxOff:document.getElementById('MaxOff').value,
+      MinSpend:(document.getElementById('MinSpend').value === "") ? 0 : document.getElementById('MinSpend').value,
+      MaxOff:(document.getElementById('MaxOff').value === "") ? 0 : document.getElementById('MaxOff').value,
       BrandName:document.getElementById('BrandName').value,
       CouponCode:couponCode,
       ProductList:document.getElementById('ProductList').value,
       CouponCategoryId:couponCategoryId,
       UserId: (UserData != null)? UserData.userId : 0
         };
-        fetch('https://localhost:44346/api/Coupon/UploadCoupon',{
+        fetch(API_URL + 'Coupon/UploadCoupon',{
             method: 'POST',
             headers:{'Content-type':'application/json'},
               body: JSON.stringify(coupon)
           }).then(r=>r.json())
           .then((data) => {
             console.log(data);
-            if(data.couponId !== 0){
+            if(data.couponId !== undefined && data.couponId !== 0){
               swal.fire({
                 title: "Coupon Added Successfully",
             icon: "success",
@@ -81,7 +106,7 @@ class AddCoupon extends Component{
         category_list.map((x) => {
           const obj = {
             "id": x.couponCategoryId,
-            "value": x.categoryName
+            "name": x.categoryName
           }
           category_obj.push(obj);
         })
@@ -148,34 +173,47 @@ class AddCoupon extends Component{
                 <Table>
                   <tbody>
                   <tr>
-                    <td><Label>Enter Expiry Date<span style={{color:"red"}}>*</span></Label></td>
-                    <td><Input type="text" id='ExpiryDate'/></td>
+                    <td><Label>Select Expiry Date<span style={{color:"red"}}>*</span></Label></td>
+                    <td>
+                      <DatePicker  id='ExpiryDate'  className="form-control"
+              selected={ this.state.expiryDate }  
+              onChange={ this.handleChange }  
+              dateFormat="MMMM d, yyyy"  
+              minDate={new Date()}  
+          />  
+                      </td>
                   </tr>
                   <tr>
-                  <td><Label>Enter Min Spend</Label></td>
-                    <td><Input type="text" id='MinSpend'/></td>
+                  <td><Label>Enter Min Spend (In Rs.)</Label></td>
+                    <td><Input type="text" id='MinSpend' className="form-control"/></td>
                   </tr>
                   <tr>
-                  <td><Label>Enter Max Off</Label></td>
-                    <td><Input type="text" id='MaxOff'/></td>
+                  <td><Label>Enter Max Off (In %)</Label></td>
+                    <td><Input type="text" id='MaxOff' className="form-control"/></td>
                   </tr>
                   <tr>
                   <td><Label>Enter Company Name<span style={{color:"red"}}>*</span></Label></td>
-                    <td><Input type="text" id='BrandName'/></td>
+                    <td><Input type="text" id='BrandName' className="form-control"/></td>
                   </tr>
                   <tr>
                   <td><Label>Enter Coupon Code<span style={{color:"red"}}>*</span></Label></td>
-                    <td><Input type="text" id='CouponCode'/></td>
+                    <td><Input type="text" id='CouponCode' className="form-control"/></td>
                   </tr>
                   <tr>
                   <td><Label>Enter Product List</Label></td>
-                    <td><Input type="text" id='ProductList'/></td>
+                    <td><textarea type="text" id='ProductList' className="form-control mt-1"/></td>
                   </tr>
                   <tr>
                   <td><Label>Enter Coupon Category Id<span style={{color:"red"}}>*</span></Label></td>
                     <td>
-                      <Input type="text" id='CouponCategoryId'/>
-                      {/* <select options={category_obj} onChange={(values) => this.setValues(values)} />  */}
+        <select name="CouponCategory" id='CouponCategoryId'  className="form-control">
+        <option selected value={0}>Select...</option>
+        {
+          category_obj.map((value)=>
+          <option value={value.id}>{value.name}</option>
+     )
+        }
+        </select>
                       </td>
                   </tr>
                     </tbody>

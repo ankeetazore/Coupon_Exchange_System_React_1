@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Link} from 'react-router-dom';
-import DefaultProfilePath from './admin-assets/profile-image.png';
+import DefaultCategoryPath from './admin-assets/category-icon.png';
 //jQuery libraries
 import 'jquery/dist/jquery.min.js';
 //Datatable Modules
@@ -10,8 +10,9 @@ import "datatables.net-dt/css/jquery.dataTables.min.css"
 import $ from 'jquery'; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import swal from "sweetalert2"; 
-import AddCouponCategory from './AddCouponCategory';
 import Modal from "./Modal";
+import axios from 'axios';
+import {API_URL} from "./Const/Const";
 
 class CouponCategoryList extends Component{
   constructor(props) {
@@ -20,8 +21,17 @@ class CouponCategoryList extends Component{
     this.handleChange = this.editCouponCategory.bind(this);
     this.state = {
         isOpen:false,
-        id:0
+        id:0,
+        data:[]
     }
+  }
+
+  componentDidMount(){
+    axios.get(API_URL + 'CouponCategory').then(res => 
+    {
+      this.setState({ data: res.data });
+      sessionStorage.setItem("CouponCategoryList",JSON.stringify(res.data));
+    }); 
   }
 
   setIsOpen = (e) => {
@@ -40,7 +50,7 @@ this.setId(couponCategoryId);
 deleteCouponCategory = (event) => {
   event.preventDefault();
   let couponCategoryId = parseInt(event.target.value);
-  fetch(`https://localhost:44346/api/CouponCategory/${couponCategoryId}`, {
+  fetch(API_URL + `CouponCategory/${couponCategoryId}`, {
     method: "DELETE",
   })
     .then((res) => res.text())
@@ -51,9 +61,12 @@ deleteCouponCategory = (event) => {
       icon: "success",
       confirmButtonText: "OK",
     });
-    const new_data = JSON.parse(sessionStorage.getItem("CouponCategoryList")).filter(x => x.couponCategoryId != couponCategoryId );
-    sessionStorage.setItem("CouponCategoryList",JSON.stringify(new_data));
-    document.getElementById("categoryrow-" + couponCategoryId).remove();
+    axios.get(API_URL+ 'CouponCategory').then(res =>
+      {
+        this.setState({ data: res.data });
+        sessionStorage.setItem("CouponCategoryList",JSON.stringify(res.data));
+      });
+      window.location.href = "/";
       }
       else{
         swal.fire({
@@ -76,7 +89,6 @@ deleteCouponCategory = (event) => {
 
 render() {
    
-const category_list = JSON.parse(sessionStorage.getItem("CouponCategoryList"));
 let sr_no = 1;
       return (
 <>
@@ -92,10 +104,12 @@ let sr_no = 1;
               </thead>
               <tbody>
            {
-                category_list.map((value)=>
+                this.state.data.map((value)=>
                 <tr id={"categoryrow-" + value.couponCategoryId} key={value.couponCategoryId}>
                   <td>{sr_no++}</td>
-                  <td>{value.categoryImagePath}</td>
+                  <td>
+                  <img className="card-img-top img-fluid profile-img" src={DefaultCategoryPath} alt="Card image cap" style={{height: "50px",width:"50px"}}/>
+                  </td>
                   <td>{value.categoryName}</td>
                   <td className="p-0">
                   <div>

@@ -3,25 +3,64 @@ import swal from "sweetalert2";
 import './App.css';
 import styled from "styled-components";
 //import {mobile} from "../responsive";
+import {API_URL} from "./Const/Const";
 
 class Registration extends Component{
        onRegisterUser(event){
         event.preventDefault();
         let MobileNo = 0;
-        if(document.getElementById('MobileNumber') != null || document.getElementById('MobileNumber') != undefined)
-            MobileNo = document.getElementById('MobileNumber').value;
+        let Name = document.getElementById("Name").value;
+        let EmailId = document.getElementById("EmailId").value;
+        let Password = document.getElementById("Password").value;
+        let ConfirmPassword = document.getElementById("ConfirmPassword").value;
+
+        if(document.getElementById('MobileNo') !== null && document.getElementById('MobileNo') !== undefined)
+            MobileNo = document.getElementById('MobileNo').value;
+
+            if(Name.length === 0){
+              alert("Enter Name");
+              return false;
+            }
+
+            if(EmailId.length === 0){
+              alert("Enter Email Id");
+              return false;
+            }
+
+            function isValidEmail(email) {
+              return /\S+@\S+\.\S+/.test(email);
+            }
+            if(!isValidEmail(document.getElementById("EmailId").value)){
+              alert("Enter Valid Email Id");
+              return false;
+            }
+
+            if(Password.length === 0){
+              alert("Enter Password");
+              return false;
+            }
+
+            if(ConfirmPassword.length === 0){
+              alert("Enter Confirm Password");
+              return false;
+            }
+
+            if(ConfirmPassword !== Password){
+              alert("Confirm Password does not match with Password");
+              return false;
+            }
             
         let user={
             UserId:0,
-            Name:document.getElementById('Name').value,
-            EmailId:document.getElementById('EmailId').value,
-            MobileNumber:MobileNo,
-            Password:document.getElementById('Password').value,
+            Name:Name,
+            EmailId:EmailId,
+            MobileNumber:(MobileNo === "") ? 0 : MobileNo,
+            Password:Password,
             UserRole:"User",
             CouponExchangeCount:0,
             couponUploadCount:0
             };
-            fetch('https://localhost:44346/api/UserRegistration',{
+            fetch(API_URL + 'UserRegistration/RegisterUser',{
                 method: 'POST',
                 headers:{'Content-type':'application/json'},
                   body: JSON.stringify(user)

@@ -3,6 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import UploadCoupon from './UploadCoupon';
 import UserDashboard from './UserDashboard';
+import FilteredCouponList from './FilteredCouponList';
+import ExchangeCoupon from './ExchangeCoupon';
+import SelectedCoupon from './SelectedCoupon';
 
 class UserProfile extends Component{
   Logout() {
@@ -32,6 +35,9 @@ render() {
     <Routes>
     <Route exact path="/" element={<UserDashboard/>}></Route> 
     <Route exact path="/uploadcoupon" element={<UploadCoupon/>}></Route> 
+    <Route exact path="/filteredcouponlist" element={<FilteredCouponList/>}></Route> 
+    <Route exact path="/selectedcoupon" element={<SelectedCoupon/>}></Route> 
+    <Route exact path="/exchangecoupon" element={<ExchangeCoupon/>}></Route> 
   </Routes>
   </Router>
   );

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
-import AddCouponCategory from './AddCouponCategory';
 import AdminDashboard from './AdminDashboard';
 import AddCoupon from './AddCoupon';
 
@@ -32,7 +31,6 @@ render() {
     </div>
     <Routes>
     <Route exact path="/" element={<AdminDashboard/>}></Route> 
-    <Route exact path="/addcouponcategory" element={<AddCouponCategory/>}></Route> 
     <Route exact path="/addcoupon" element={<AddCoupon/>}></Route> 
   </Routes>
   </Router>

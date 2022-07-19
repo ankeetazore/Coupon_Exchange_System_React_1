@@ -6,6 +6,7 @@ import swal from "sweetalert2";
 import CouponCategoryList from './CouponCategoryList';
 import axios from 'axios';
 import Modal from "./Modal";
+import {API_URL} from "./Const/Const";
 
 let LoggedInUserDetails = null;
 class AdminDashboard extends Component{
@@ -26,10 +27,7 @@ constructor(props){
         isDisabled : true,
         isOpen:false
     }
-    axios.get('https://localhost:44346/api/CouponCategory').then(res => 
-     {
-    sessionStorage.setItem("CouponCategoryList",JSON.stringify(res.data));
-     }); 
+    
 }
 
 setIsOpen = (e) => {
@@ -44,9 +42,9 @@ setIsOpen = (e) => {
                 return false;
             }
             LoggedInUserDetails.name = this.state.name;
-            LoggedInUserDetails.mobileNumber = this.state.mobilenumber;
+            LoggedInUserDetails.mobileNumber = (this.state.mobilenumber === "") ? 0 : this.state.mobilenumber;
             let user = LoggedInUserDetails;
-                fetch('https://localhost:44346/api/UserRegistration',{
+                fetch(API_URL + 'UserRegistration/RegisterUser',{
                     method: 'POST',
                     headers:{'Content-type':'application/json'},
                       body: JSON.stringify(user)

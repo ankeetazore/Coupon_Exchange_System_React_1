@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import DefaultProfilePath from './user-assets/profile-image.png';
 import swal from "sweetalert2"; 
+import {API_URL} from "./Const/Const";
+import axios from 'axios';
 
 let LoggedInUserDetails = null;
 class UserDashboard extends Component{
@@ -33,9 +35,9 @@ constructor(props){
                 return false;
             }
             LoggedInUserDetails.name = this.state.name;
-            LoggedInUserDetails.mobileNumber = this.state.mobilenumber;
+            LoggedInUserDetails.mobileNumber = (this.state.mobilenumber === "") ? 0 : this.state.mobilenumber;
             let user = LoggedInUserDetails;
-                fetch('https://localhost:44346/api/UserRegistration',{
+                fetch(API_URL + 'UserRegistration/RegisterUser',{
                     method: 'POST',
                     headers:{'Content-type':'application/json'},
                       body: JSON.stringify(user)
@@ -91,6 +93,13 @@ constructor(props){
         this.setState({mobilenumber: value});
         this.handleSubmit(value);
     }
+
+    componentDidMount(){
+        axios.get(API_URL + 'CouponCategory').then(res => 
+        {
+          sessionStorage.setItem("CouponCategoryList",JSON.stringify(res.data));
+        }); 
+      }
 
 render() {
       return (

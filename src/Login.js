@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 import styled from "styled-components";
 import swal from "sweetalert2"; 
+import {API_URL} from "./Const/Const";
 
 let LoggedInUserDetails = {};
 
@@ -17,11 +18,11 @@ class Login extends Component{
     alert("Enter Password");
     else
     {
-      const apiurl="https://localhost:44346/api/Login?username=" + username+ "&password=" + password;
+      const apiurl=API_URL + "Login?username=" + username+ "&password=" + password;
       axios.post(apiurl).then((response)=>{
           if (response.status === 200 && response.data === "Success")
           {            
-                const apiurl="https://localhost:44346/api/UserRegistration/" + username;
+                const apiurl=API_URL + "UserRegistration/" + username;
                 axios.get(apiurl).then((response)=>{
                if (response.status === 200)
                {            
