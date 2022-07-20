@@ -1,12 +1,12 @@
 import React, { Component, useState } from 'react';
 import styled from "styled-components";
-import {API_URL} from "./Const/Const";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import axios from 'axios';
-import FilteredCouponList from './FilteredCouponList';
 
-function redirectToFilteredList(event) {
+function UploadCoupon(){
+  const [expiryDate, setExpiryDate] = useState(new Date()); 
+
+ const redirectToFilteredList = (event) =>{
   event.preventDefault();
     let expiryDate = document.getElementById('ExpiryDate').value;
     let couponCode = document.getElementById('CouponCode').value;
@@ -47,24 +47,11 @@ function redirectToFilteredList(event) {
         window.location.href = "/filteredcouponlist";
       }
 
-function cancelAddCoupon(event){
-  event.preventDefault();                  
-            //redirect to dashboard
-            window.location.href = "/";
-      }
-
-function UploadCoupon(){
-  const [expiryDate, setExpiryDate] = useState(new Date()); 
-  // const [coupondata, setCouponData] = React.useState({
-  // })
-
-  const handleChange = (e) =>{
-    // const {name, value} = e.target;
-    // setCouponData({
-    //   ...coupondata,
-    //   [e.target.name]: value
-    // });
-    }
+      const cancelAddCoupon = (event) => {
+        event.preventDefault();                  
+                  //redirect to dashboard
+                  window.location.href = "/";
+            }
 
   const Container = styled.div`
   width: 100vw;
@@ -150,24 +137,24 @@ const category_list = JSON.parse(sessionStorage.getItem("CouponCategoryList"));
             </tr>
             <tr>
             <td><Label>Enter Min Spend (In Rs.)</Label></td>
-              <td><Input type="text" id='MinSpend' name='MinSpend' onChange={(e) => handleChange(e)} className="form-control"/></td>
+              <td><Input type="text" id='MinSpend' name='MinSpend' className="form-control"/></td>
             </tr>
             <tr>
             <td><Label>Enter Max Off (In %)</Label></td>
-              <td><Input type="text" id='MaxOff' name='MaxOff' onChange={(e) => handleChange(e)} className="form-control"/></td>
+              <td><Input type="text" id='MaxOff' name='MaxOff' className="form-control"/></td>
             </tr>
             <tr>
             <td><Label>Enter Company Name<span style={{color:"red"}}>*</span></Label></td>
-              <td><Input type="text" id='BrandName' name='BrandName' onChange={(e) => handleChange(e)} className="form-control"/></td>
+              <td><Input type="text" id='BrandName' name='BrandName' className="form-control"/></td>
             </tr>
             <tr>
             <td><Label>Enter Coupon Code<span style={{color:"red"}}>*</span></Label></td>
-              <td><Input type="text" id='CouponCode' name='CouponCode' onChange={(e) => handleChange(e)} className="form-control"/></td>
+              <td><Input type="text" id='CouponCode' name='CouponCode' className="form-control"/></td>
             </tr>
             <tr>
             <td><Label>Enter Product List</Label></td>
               <td>
-                <textarea type="text" id='ProductList' name='ProductList' onChange={(e) => handleChange(e)} className="form-control mt-1"/>
+                <textarea type="text" id='ProductList' name='ProductList' className="form-control mt-1"/>
                 </td>
             </tr>
             <tr>
@@ -182,7 +169,6 @@ const category_list = JSON.parse(sessionStorage.getItem("CouponCategoryList"));
         }
         </select>
                       </td>
-                
             </tr>
               </tbody>
           </Table>

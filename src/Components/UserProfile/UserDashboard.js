@@ -130,7 +130,7 @@ render() {
                                     <div className="card-body">
                                         <h5 className="mt-0">Uploaded Coupon Count</h5>
                                         <input className="border-0" id='UploadedCouponCount' value={this.state.userdata.couponUploadCount} 
-                                        readOnly disabled="disabled" style={{fontSize: "xx-large"}}/>
+                                        readOnly disabled="disabled" style={{fontSize: "xx-large",width:"100%"}}/>
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@ render() {
                                     <div className="card-body">
                                     <h5 className="mt-0">Exchanged Coupon Count</h5>
                                         <input className="border-0" id='ExchangedCouponCount' value={this.state.userdata.couponExchangeCount} 
-                                        readOnly disabled="disabled" style={{fontSize: "xx-large"}}/>
+                                        readOnly disabled="disabled" style={{fontSize: "xx-large",width:"100%"}}/>
                                     </div>
                                 </div>
                             </div>
